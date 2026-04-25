@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VocalDesk – AI Voice Sales Assistant</title>
-  <meta name="description" content="VocalDesk: Multi-Platform AI Voice Sales Assistant. Start a conversation with our intelligent assistant and let your voice do the work." />
+  <meta name="description"
+    content="VocalDesk: Multi-Platform AI Voice Sales Assistant. Start a conversation with our intelligent assistant and let your voice do the work." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
 
   <!-- ═══════════════════════════════════════════════════════════
@@ -23,8 +27,8 @@
   <div id="screen-landing" class="screen active">
     <div class="landing-wrap">
       <!-- Central mic hero -->
-      <div class="hero-mic-container" id="btn-hero-mic" role="button" tabindex="0"
-           onclick="showScreen('voice-input')" aria-label="Start talking">
+      <div class="hero-mic-container" id="btn-hero-mic" role="button" tabindex="0" onclick="showScreen('voice-input')"
+        aria-label="Start talking">
         <!-- Outer glow ring -->
         <div class="mic-outer-ring"></div>
         <!-- Teal circle -->
@@ -33,10 +37,11 @@
           <span class="sparkle" aria-hidden="true">✦</span>
           <!-- Mic icon -->
           <svg class="mic-svg" viewBox="0 0 56 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="14" y="4" width="28" height="44" rx="14" fill="white"/>
-            <path d="M6 34c0 12.15 9.85 22 22 22s22-9.85 22-22" stroke="white" stroke-width="4" stroke-linecap="round"/>
-            <line x1="28" y1="56" x2="28" y2="68" stroke="white" stroke-width="4" stroke-linecap="round"/>
-            <line x1="18" y1="68" x2="38" y2="68" stroke="white" stroke-width="4" stroke-linecap="round"/>
+            <rect x="14" y="4" width="28" height="44" rx="14" fill="white" />
+            <path d="M6 34c0 12.15 9.85 22 22 22s22-9.85 22-22" stroke="white" stroke-width="4"
+              stroke-linecap="round" />
+            <line x1="28" y1="56" x2="28" y2="68" stroke="white" stroke-width="4" stroke-linecap="round" />
+            <line x1="18" y1="68" x2="38" y2="68" stroke="white" stroke-width="4" stroke-linecap="round" />
           </svg>
         </div>
       </div>
@@ -80,8 +85,8 @@
   <div id="screen-voice-input" class="screen">
     <div class="voice-wrap">
       <!-- Pulsing rings + mic button -->
-      <div class="voice-mic-outer" id="voice-mic-btn" role="button" tabindex="0"
-           onclick="toggleRecording()" aria-label="Tap to record">
+      <div class="voice-mic-outer" id="voice-mic-btn" role="button" tabindex="0" onclick="toggleRecording()"
+        aria-label="Tap to record">
         <!-- Orange gradient pulse ring -->
         <div class="voice-ring voice-ring-lg"></div>
         <div class="voice-ring voice-ring-md"></div>
@@ -90,14 +95,16 @@
           <!-- Ripple label top-right -->
           <div class="voice-ripple-indicator" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
-              <path d="M5 12h2M9 8h2M13 10h2M17 7h2M5 16h2M9 14h2M13 15h2M17 12h2" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M5 12h2M9 8h2M13 10h2M17 7h2M5 16h2M9 14h2M13 15h2M17 12h2" stroke="white" stroke-width="1.5"
+                stroke-linecap="round" />
             </svg>
           </div>
           <svg class="mic-svg" viewBox="0 0 56 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="14" y="4" width="28" height="44" rx="14" fill="white"/>
-            <path d="M6 34c0 12.15 9.85 22 22 22s22-9.85 22-22" stroke="white" stroke-width="4" stroke-linecap="round"/>
-            <line x1="28" y1="56" x2="28" y2="68" stroke="white" stroke-width="4" stroke-linecap="round"/>
-            <line x1="18" y1="68" x2="38" y2="68" stroke="white" stroke-width="4" stroke-linecap="round"/>
+            <rect x="14" y="4" width="28" height="44" rx="14" fill="white" />
+            <path d="M6 34c0 12.15 9.85 22 22 22s22-9.85 22-22" stroke="white" stroke-width="4"
+              stroke-linecap="round" />
+            <line x1="28" y1="56" x2="28" y2="68" stroke="white" stroke-width="4" stroke-linecap="round" />
+            <line x1="18" y1="68" x2="38" y2="68" stroke="white" stroke-width="4" stroke-linecap="round" />
           </svg>
         </div>
       </div>
@@ -113,12 +120,12 @@
       <div class="voice-text-fallback" id="text-fallback">
         <div class="text-fallback-divider"><span>or type a message</span></div>
         <div class="text-input-row">
-          <input type="text" id="text-input-field" class="text-inp"
-            placeholder="Type your message here…"
+          <input type="text" id="text-input-field" class="text-inp" placeholder="Type your message here…"
             onkeydown="if(event.key==='Enter') sendTextMessage()" />
           <button id="btn-send-text" class="btn-send-icon" onclick="sendTextMessage()" aria-label="Send">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
             </svg>
           </button>
         </div>
@@ -135,11 +142,12 @@
       <div class="proc-icon-wrap">
         <div class="proc-icon-circle">
           <svg viewBox="0 0 48 48" fill="none" width="36" height="36">
-            <ellipse cx="24" cy="20" rx="14" ry="12" stroke="white" stroke-width="2.5"/>
-            <path d="M10 20c0 4 2 7 5 9M38 20c0 4-2 7-5 9M24 32v6M18 38h12" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="18" cy="17" r="2" fill="white"/>
-            <circle cx="30" cy="17" r="2" fill="white"/>
-            <path d="M20 22c0 0 2 2 4 0 2-2 4 0 4 0" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            <ellipse cx="24" cy="20" rx="14" ry="12" stroke="white" stroke-width="2.5" />
+            <path d="M10 20c0 4 2 7 5 9M38 20c0 4-2 7-5 9M24 32v6M18 38h12" stroke="white" stroke-width="2.5"
+              stroke-linecap="round" />
+            <circle cx="18" cy="17" r="2" fill="white" />
+            <circle cx="30" cy="17" r="2" fill="white" />
+            <path d="M20 22c0 0 2 2 4 0 2-2 4 0 4 0" stroke="white" stroke-width="1.5" stroke-linecap="round" />
           </svg>
         </div>
         <div class="proc-sparkle" aria-hidden="true">✦</div>
@@ -193,7 +201,9 @@
       <div class="chat-header-logo">
         <div class="chat-logo-icon">
           <svg viewBox="0 0 24 24" fill="white" width="14" height="14">
-            <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"/>
+            <path fill-rule="evenodd"
+              d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"
+              clip-rule="evenodd" />
           </svg>
         </div>
         <div>
@@ -216,7 +226,8 @@
         </div>
         <div class="chat-avatar user-avatar">
           <svg viewBox="0 0 24 24" fill="white" width="14" height="14">
-            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+            <path
+              d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
           </svg>
         </div>
       </div>
@@ -225,13 +236,19 @@
       <div class="chat-row ai-row">
         <div class="chat-avatar ai-avatar-icon">
           <svg viewBox="0 0 24 24" fill="white" width="14" height="14">
-            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+            <path fill-rule="evenodd"
+              d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+              clip-rule="evenodd" />
           </svg>
         </div>
         <div class="chat-bubble ai-bubble">
           <p id="response-ai-text">AI response…</p>
           <button class="btn-play-voice" id="btn-play-response" onclick="playVoiceResponse()">
-            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"/></svg>
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+              <path fill-rule="evenodd"
+                d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z"
+                clip-rule="evenodd" />
+            </svg>
             Play voice response
             <span class="btn-play-sparkle">✦</span>
           </button>
@@ -254,9 +271,9 @@
       <div class="chat-mic-bar" onclick="continueConversation()" role="button" tabindex="0">
         <div class="chat-mic-btn">
           <svg class="mic-svg-sm" viewBox="0 0 32 40" fill="none">
-            <rect x="8" y="2" width="16" height="24" rx="8" fill="white"/>
-            <path d="M3 18c0 7.2 5.8 13 13 13s13-5.8 13-13" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="16" y1="31" x2="16" y2="38" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <rect x="8" y="2" width="16" height="24" rx="8" fill="white" />
+            <path d="M3 18c0 7.2 5.8 13 13 13s13-5.8 13-13" stroke="white" stroke-width="2.5" stroke-linecap="round" />
+            <line x1="16" y1="31" x2="16" y2="38" stroke="white" stroke-width="2.5" stroke-linecap="round" />
           </svg>
         </div>
         <span class="chat-continue-label">
@@ -274,14 +291,18 @@
     <div class="error-wrap">
       <div class="error-icon-circle orange-circle">
         <svg viewBox="0 0 48 48" fill="none" width="36" height="36">
-          <path d="M3 3l42 42M14 13.4A20 20 0 0124 10c5.3 0 10.2 2.1 13.8 5.6M7.7 8.7C4.3 11.9 2 16.2 2 21M40.3 8.7C43.7 11.9 46 16.2 46 21M21 24a5 5 0 015-5M34.4 17A14 14 0 0124 14c-3.3 0-6.3 1.1-8.6 3M24 36a2 2 0 100-4 2 2 0 000 4z" stroke="#f97316" stroke-width="2.5" stroke-linecap="round"/>
+          <path
+            d="M3 3l42 42M14 13.4A20 20 0 0124 10c5.3 0 10.2 2.1 13.8 5.6M7.7 8.7C4.3 11.9 2 16.2 2 21M40.3 8.7C43.7 11.9 46 16.2 46 21M21 24a5 5 0 015-5M34.4 17A14 14 0 0124 14c-3.3 0-6.3 1.1-8.6 3M24 36a2 2 0 100-4 2 2 0 000 4z"
+            stroke="#f97316" stroke-width="2.5" stroke-linecap="round" />
         </svg>
       </div>
       <h2 class="error-title orange-text">No Internet Connection</h2>
       <p class="error-msg">Please check your connection and try again.</p>
       <button id="btn-retry-internet" class="btn-cta" onclick="retryFromError('internet')">
         <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="margin-right:6px">
-          <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+          <path fill-rule="evenodd"
+            d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+            clip-rule="evenodd" />
         </svg>
         Try Again
       </button>
@@ -300,18 +321,20 @@
     <div class="error-wrap">
       <div class="error-icon-circle orange-circle">
         <svg viewBox="0 0 48 48" fill="none" width="36" height="36">
-          <circle cx="24" cy="24" r="18" stroke="#f97316" stroke-width="2.5"/>
-          <path d="M24 14v12" stroke="#f97316" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="24" cy="33" r="2" fill="#f97316"/>
+          <circle cx="24" cy="24" r="18" stroke="#f97316" stroke-width="2.5" />
+          <path d="M24 14v12" stroke="#f97316" stroke-width="3" stroke-linecap="round" />
+          <circle cx="24" cy="33" r="2" fill="#f97316" />
           <!-- mini mic slash overlay -->
-          <path d="M18 14l12 12" stroke="#f97316" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+          <path d="M18 14l12 12" stroke="#f97316" stroke-width="2" stroke-linecap="round" opacity="0.4" />
         </svg>
       </div>
       <h2 class="error-title orange-text">Voice Not Detected</h2>
       <p class="error-msg">We couldn't hear you. Please try speaking again.</p>
       <button id="btn-retry-voice" class="btn-cta" onclick="retryFromError('voice')">
         <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="margin-right:6px">
-          <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+          <path fill-rule="evenodd"
+            d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+            clip-rule="evenodd" />
         </svg>
         Try Again
       </button>
@@ -331,14 +354,16 @@
       <!-- Shield icon + title -->
       <div class="admin-shield-icon">
         <svg viewBox="0 0 32 36" fill="none" width="28" height="28">
-          <path d="M16 2L4 7v10c0 8.3 5.1 16 12 18 6.9-2 12-9.7 12-18V7L16 2z" fill="white"/>
+          <path d="M16 2L4 7v10c0 8.3 5.1 16 12 18 6.9-2 12-9.7 12-18V7L16 2z" fill="white" />
         </svg>
         <span class="sparkle admin-sparkle" aria-hidden="true">✦</span>
       </div>
       <h1 class="admin-title">Admin Access</h1>
       <p class="admin-subtitle">
-        <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14" style="vertical-align:-2px;margin-right:4px">
-          <path d="M1 4c0-1.1.9-2 2-2h10a2 2 0 012 2v8a2 2 0 01-2 2H3a2 2 0 01-2-2V4zm2 0v.01L8 7.5 13 4.01V4H3zm0 2v6h10V6L8 9.5 3 6z"/>
+        <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14"
+          style="vertical-align:-2px;margin-right:4px">
+          <path
+            d="M1 4c0-1.1.9-2 2-2h10a2 2 0 012 2v8a2 2 0 01-2 2H3a2 2 0 01-2-2V4zm2 0v.01L8 7.5 13 4.01V4H3zm0 2v6h10V6L8 9.5 3 6z" />
         </svg>
         VocalDesk Administration Panel
       </p>
@@ -352,7 +377,8 @@
             <label class="form-label" for="admin-username">Email Address</label>
             <div class="form-input-wrap">
               <svg class="form-input-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
               </svg>
               <input type="text" id="admin-username" class="form-input" placeholder="admin@vocaldesk.com"
                 autocomplete="username" required />
@@ -363,7 +389,9 @@
             <label class="form-label" for="admin-password">Password</label>
             <div class="form-input-wrap">
               <svg class="form-input-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                <path fill-rule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clip-rule="evenodd" />
               </svg>
               <input type="password" id="admin-password" class="form-input" placeholder="••••••••"
                 autocomplete="current-password" required />
@@ -390,11 +418,14 @@
         <span class="status-dot dot-teal"></span>
         Secured with AI Protection
         <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13" style="margin-left:4px;color:#00A9A5">
-          <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+          <path fill-rule="evenodd"
+            d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+            clip-rule="evenodd" />
         </svg>
       </div>
 
-      <button class="btn-link" onclick="showScreen('landing')" style="margin-top:12px">← Back to Voice Assistant</button>
+      <button class="btn-link" onclick="showScreen('landing')" style="margin-top:12px">← Back to Voice
+        Assistant</button>
     </div>
   </div>
 
@@ -407,7 +438,9 @@
       <div class="dash-logo">
         <div class="dash-logo-icon">
           <svg viewBox="0 0 24 24" fill="white" width="16" height="16">
-            <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"/>
+            <path fill-rule="evenodd"
+              d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"
+              clip-rule="evenodd" />
           </svg>
         </div>
         <div>
@@ -418,13 +451,17 @@
       <div class="dash-header-actions">
         <button class="btn-dash-action" onclick="showScreen('architecture')">
           <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
-            <path fill-rule="evenodd" d="M3 4a1 1 0 000 2h11.586l-2.293 2.293a1 1 0 101.414 1.414l4-4a1 1 0 000-1.414l-4-4a1 1 0 10-1.414 1.414L14.586 4H3zm13 12a1 1 0 100-2H4.414l2.293-2.293a1 1 0 00-1.414-1.414l-4 4a1 1 0 000 1.414l4 4a1 1 0 001.414-1.414L4.414 16H16z" clip-rule="evenodd"/>
+            <path fill-rule="evenodd"
+              d="M3 4a1 1 0 000 2h11.586l-2.293 2.293a1 1 0 101.414 1.414l4-4a1 1 0 000-1.414l-4-4a1 1 0 10-1.414 1.414L14.586 4H3zm13 12a1 1 0 100-2H4.414l2.293-2.293a1 1 0 00-1.414-1.414l-4 4a1 1 0 000 1.414l4 4a1 1 0 001.414-1.414L4.414 16H16z"
+              clip-rule="evenodd" />
           </svg>
           Architecture
         </button>
         <button class="btn-dash-action btn-logout" id="btn-logout" onclick="adminLogout()">
           <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
-            <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/>
+            <path fill-rule="evenodd"
+              d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+              clip-rule="evenodd" />
           </svg>
           Logout
         </button>
@@ -438,7 +475,8 @@
           <div class="stat-card-header">
             <div class="stat-icon-box teal-box">
               <svg viewBox="0 0 20 20" fill="white" width="18" height="18">
-                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                <path
+                  d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
               </svg>
             </div>
             <span class="stat-trend trend-up" id="stat-trend-1">↑ +12%</span>
@@ -450,7 +488,9 @@
           <div class="stat-card-header">
             <div class="stat-icon-box orange-box">
               <svg viewBox="0 0 20 20" fill="white" width="18" height="18">
-                <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
+                <path fill-rule="evenodd"
+                  d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+                  clip-rule="evenodd" />
               </svg>
             </div>
             <span class="stat-trend trend-up" id="stat-trend-2">↑ +23%</span>
@@ -462,7 +502,9 @@
           <div class="stat-card-header">
             <div class="stat-icon-box teal-box">
               <svg viewBox="0 0 20 20" fill="white" width="18" height="18">
-                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                <path fill-rule="evenodd"
+                  d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+                  clip-rule="evenodd" />
               </svg>
             </div>
             <span class="stat-trend trend-up">↑ +8%</span>
@@ -474,7 +516,9 @@
           <div class="stat-card-header">
             <div class="stat-icon-box orange-box">
               <svg viewBox="0 0 20 20" fill="white" width="18" height="18">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                <path fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                  clip-rule="evenodd" />
               </svg>
             </div>
             <span class="stat-trend trend-down">↓ -5%</span>
@@ -491,7 +535,9 @@
           <div class="dash-panel-header">
             <div class="panel-header-icon teal-box" style="width:32px;height:32px;border-radius:8px">
               <svg viewBox="0 0 20 20" fill="white" width="16" height="16">
-                <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z" clip-rule="evenodd"/>
+                <path fill-rule="evenodd"
+                  d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z"
+                  clip-rule="evenodd" />
               </svg>
             </div>
             <h3 class="panel-title">System Health <span class="sparkle" aria-hidden="true">✦</span></h3>
@@ -499,7 +545,11 @@
           <div class="health-list">
             <div class="health-item">
               <div class="health-item-icon teal-box-sm">
-                <svg viewBox="0 0 16 16" fill="white" width="10" height="10"><path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0013 8H3a7 7 0 006 6.93V17H6a1 1 0 100 2h4a1 1 0 100-2H8v-2.07z" clip-rule="evenodd"/></svg>
+                <svg viewBox="0 0 16 16" fill="white" width="10" height="10">
+                  <path fill-rule="evenodd"
+                    d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0013 8H3a7 7 0 006 6.93V17H6a1 1 0 100 2h4a1 1 0 100-2H8v-2.07z"
+                    clip-rule="evenodd" />
+                </svg>
               </div>
               <div class="health-item-info">
                 <span class="health-name">Voice Recognition</span>
@@ -509,7 +559,11 @@
             </div>
             <div class="health-item">
               <div class="health-item-icon teal-box-sm">
-                <svg viewBox="0 0 16 16" fill="white" width="10" height="10"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v3h2a1 1 0 01.82 1.573l-5 7A1 1 0 018 13v-3H6a1 1 0 01-.82-1.573l5-7a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
+                <svg viewBox="0 0 16 16" fill="white" width="10" height="10">
+                  <path fill-rule="evenodd"
+                    d="M11.3 1.046A1 1 0 0112 2v3h2a1 1 0 01.82 1.573l-5 7A1 1 0 018 13v-3H6a1 1 0 01-.82-1.573l5-7a1 1 0 011.12-.38z"
+                    clip-rule="evenodd" />
+                </svg>
               </div>
               <div class="health-item-info">
                 <span class="health-name">AI Processing</span>
@@ -519,7 +573,11 @@
             </div>
             <div class="health-item">
               <div class="health-item-icon teal-box-sm">
-                <svg viewBox="0 0 16 16" fill="white" width="10" height="10"><path fill-rule="evenodd" d="M9.383 1.076A1 1 0 0110 2v10a1 1 0 01-1.707.707L4.586 9H2a1 1 0 01-1-1V6a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217z" clip-rule="evenodd"/></svg>
+                <svg viewBox="0 0 16 16" fill="white" width="10" height="10">
+                  <path fill-rule="evenodd"
+                    d="M9.383 1.076A1 1 0 0110 2v10a1 1 0 01-1.707.707L4.586 9H2a1 1 0 01-1-1V6a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217z"
+                    clip-rule="evenodd" />
+                </svg>
               </div>
               <div class="health-item-info">
                 <span class="health-name">Text-to-Speech</span>
@@ -529,7 +587,10 @@
             </div>
             <div class="health-item">
               <div class="health-item-icon teal-box-sm">
-                <svg viewBox="0 0 16 16" fill="white" width="10" height="10"><path d="M3 2a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2H3zm4 3h2v5H7V5zm-2 2h2v3H5V7zm6 0h-2v3h2V7z"/></svg>
+                <svg viewBox="0 0 16 16" fill="white" width="10" height="10">
+                  <path
+                    d="M3 2a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2H3zm4 3h2v5H7V5zm-2 2h2v3H5V7zm6 0h-2v3h2V7z" />
+                </svg>
               </div>
               <div class="health-item-info">
                 <span class="health-name">Database</span>
@@ -545,7 +606,9 @@
           <div class="dash-panel-header">
             <div class="panel-header-icon orange-box" style="width:32px;height:32px;border-radius:8px">
               <svg viewBox="0 0 20 20" fill="white" width="16" height="16">
-                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                <path fill-rule="evenodd"
+                  d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+                  clip-rule="evenodd" />
               </svg>
             </div>
             <h3 class="panel-title">Recent Leads <span aria-hidden="true">⚡</span></h3>
@@ -567,18 +630,23 @@
     <div class="arch-screen-header">
       <button class="btn-back-icon" onclick="showScreen('admin-dashboard')" aria-label="Back">
         <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+          <path fill-rule="evenodd"
+            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+            clip-rule="evenodd" />
         </svg>
       </button>
       <div class="arch-header-title">
         <div class="dash-logo-icon">
           <svg viewBox="0 0 24 24" fill="white" width="14" height="14">
-            <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"/>
+            <path fill-rule="evenodd"
+              d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"
+              clip-rule="evenodd" />
           </svg>
         </div>
         <div>
           <div class="arch-header-name" style="color:var(--teal);font-weight:700">System Architecture</div>
-          <div class="arch-header-sub" style="color:var(--text-muted);font-size:0.78rem">VocalDesk Technical Overview</div>
+          <div class="arch-header-sub" style="color:var(--text-muted);font-size:0.78rem">VocalDesk Technical Overview
+          </div>
         </div>
       </div>
     </div>
@@ -590,7 +658,9 @@
       <div class="arch-card">
         <div class="arch-item-icon teal-box-lg">
           <svg viewBox="0 0 24 24" fill="white" width="20" height="20">
-            <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"/>
+            <path fill-rule="evenodd"
+              d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"
+              clip-rule="evenodd" />
           </svg>
         </div>
         <div class="arch-item-content">
@@ -609,7 +679,9 @@
       <div class="arch-card">
         <div class="arch-item-icon orange-box-lg">
           <svg viewBox="0 0 24 24" fill="white" width="20" height="20">
-            <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"/>
+            <path fill-rule="evenodd"
+              d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z"
+              clip-rule="evenodd" />
           </svg>
         </div>
         <div class="arch-item-content">
@@ -628,7 +700,7 @@
       <div class="arch-card">
         <div class="arch-item-icon teal-box-lg">
           <svg viewBox="0 0 24 24" fill="white" width="20" height="20">
-            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            <path d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
         </div>
         <div class="arch-item-content">
@@ -647,7 +719,8 @@
       <div class="arch-card">
         <div class="arch-item-icon orange-box-lg">
           <svg viewBox="0 0 24 24" fill="white" width="20" height="20">
-            <path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+            <path
+              d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
           </svg>
         </div>
         <div class="arch-item-content">
@@ -668,4 +741,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>
