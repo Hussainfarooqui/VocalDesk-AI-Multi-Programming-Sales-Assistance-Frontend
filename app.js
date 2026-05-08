@@ -29,7 +29,9 @@ function initParticles() {
 // API CLIENT
 // ════════════════════════════════════════════════════════════════
 
-const API_BASE = window.location.origin;
+const API_BASE = window.location.origin.includes(':8002')
+  ? 'http://localhost:8001'
+  : window.location.origin;
 
 const api = {
   token: sessionStorage.getItem('vocaldesk_token') || null,
@@ -182,6 +184,9 @@ async function processAudioChunks() {
   const blob = new Blob(audioChunks, { type: getSupportedMimeType() || 'audio/webm' });
   const fd = new FormData();
   fd.append('audio', blob, 'recording.webm');
+  if (conversationHistory.length) {
+    fd.append('conversation_history', JSON.stringify(conversationHistory));
+  }
 
   showScreen('processing');
   runProcessingAnimation(false);
@@ -388,6 +393,8 @@ function adminLogout() {
 // ADMIN DASHBOARD
 // ════════════════════════════════════════════════════════════════
 
+let currentDashboardLeads = [];
+
 async function loadDashboard() {
   if (!api.token) { showScreen('admin-login'); return; }
 
@@ -396,7 +403,8 @@ async function loadDashboard() {
     document.getElementById('stat-total').textContent    = stats.total_leads   ?? '—';
     document.getElementById('stat-web').textContent      = stats.web_leads     ?? '—';
     document.getElementById('stat-whatsapp').textContent = stats.whatsapp_leads ?? '—';
-    renderRecentActivity(stats.recent_leads || []);
+    currentDashboardLeads = stats.recent_leads || [];
+    renderRecentActivity(currentDashboardLeads);
   } catch (err) {
     if (err.message.includes('401') || err.message.includes('credentials')) adminLogout();
     else showToast('Dashboard load failed: ' + err.message, 'error');
@@ -414,7 +422,7 @@ function renderRecentActivity(leads) {
     const action = escapeHtml(l.product_interest || 'Started conversation');
     const ch     = l.source_channel === 'whatsapp' ? '💬 WhatsApp' : '🌐 Web';
     return `
-      <div class="activity-item">
+      <div class="activity-item clickable" onclick="openLead('${l.id}')">
         <div class="activity-dot"></div>
         <div>
           <div class="activity-name">${name} <span style="font-weight:400;font-size:0.72rem;color:var(--teal)">${ch}</span></div>
@@ -422,6 +430,26 @@ function renderRecentActivity(leads) {
         </div>
       </div>`;
   }).join('');
+}
+
+function openLead(id) {
+  const lead = currentDashboardLeads.find(l => l.id === id);
+  if (!lead) return;
+
+  document.getElementById('modal-lead-name').textContent = lead.name || 'Anonymous';
+  document.getElementById('modal-lead-email').textContent = lead.email || '—';
+  document.getElementById('modal-lead-phone').textContent = lead.phone || '—';
+  document.getElementById('modal-lead-source').textContent = lead.source_channel === 'whatsapp' ? 'WhatsApp' : 'Web';
+  document.getElementById('modal-lead-interest').textContent = lead.product_interest || '—';
+  document.getElementById('modal-lead-summary').textContent = lead.conversation_summary || '—';
+
+  const modal = document.getElementById('lead-modal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeLeadModal() {
+  const modal = document.getElementById('lead-modal');
+  if (modal) modal.classList.remove('active');
 }
 
 // ════════════════════════════════════════════════════════════════

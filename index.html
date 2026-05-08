@@ -736,6 +736,52 @@
     </div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════════════════
+       LEAD DETAILS MODAL
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="lead-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" onclick="closeLeadModal()"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18" style="margin-right:6px; color:var(--teal)">
+            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+          </svg>
+          Lead Details
+        </h3>
+        <button class="btn-modal-close" onclick="closeLeadModal()" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="lead-detail-grid">
+          <div class="lead-detail-item">
+            <div class="lead-detail-label">Name</div>
+            <div class="lead-detail-value" id="modal-lead-name"></div>
+          </div>
+          <div class="lead-detail-item">
+            <div class="lead-detail-label">Email</div>
+            <div class="lead-detail-value" id="modal-lead-email"></div>
+          </div>
+          <div class="lead-detail-item">
+            <div class="lead-detail-label">Phone</div>
+            <div class="lead-detail-value" id="modal-lead-phone"></div>
+          </div>
+          <div class="lead-detail-item">
+            <div class="lead-detail-label">Source</div>
+            <div class="lead-detail-value" id="modal-lead-source"></div>
+          </div>
+        </div>
+        <div class="lead-detail-full">
+          <div class="lead-detail-label">Product Interest</div>
+          <div class="lead-detail-value" id="modal-lead-interest"></div>
+        </div>
+        <div class="lead-detail-full">
+          <div class="lead-detail-label">Conversation Summary</div>
+          <div class="lead-detail-box" id="modal-lead-summary"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast -->
   <div id="toast" class="toast" role="alert" aria-live="polite"></div>
 
