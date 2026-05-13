@@ -5,6 +5,11 @@
 
 'use strict';
 
+let audioContext = null;
+let analyser     = null;
+let dataArray    = null;
+let visFrame     = null;
+
 // ════════════════════════════════════════════════════════════════
 // PARTICLE BACKGROUND GENERATOR
 // ════════════════════════════════════════════════════════════════
@@ -87,9 +92,66 @@ function showScreen(name) {
   }
 }
 
+// ════════════════════════════════════════════════════════════════
+// CALL MODE LOGIC
+// ════════════════════════════════════════════════════════════════
+
+let callTimerInterval = null;
+let callStartTime = null;
+let isCallMode = false;
+
+function startCallMode() {
+  isCallMode = true;
+  showScreen('call-mode');
+  
+  callStartTime = Date.now();
+  updateCallTimer();
+  callTimerInterval = setInterval(updateCallTimer, 1000);
+  
+  // Automatically start recording for call
+  startRecording();
+}
+
+function updateCallTimer() {
+  const diff = Date.now() - callStartTime;
+  const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
+  const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+  const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+  document.getElementById('call-timer').textContent = `${h}:${m}:${s}`;
+}
+
+async function endCallMode() {
+  isCallMode = false;
+  clearInterval(callTimerInterval);
+  stopRecording();
+  
+  // Transition to processing then summary
+  showScreen('processing');
+  runProcessingAnimation(false);
+  
+  // Wait a bit to simulate processing then end conversation
+  setTimeout(() => {
+    endConversation();
+  }, 2000);
+}
+
 function _onScreenEnter(name) {
   if (name === 'admin-dashboard') loadDashboard();
   if (name === 'voice-input')     resetVoiceUI();
+  if (name === 'call-mode')       { /* init call specific state */ }
+}
+
+function updateVisualizer() {
+  if (!isCallMode || !analyser) return;
+  analyser.getByteFrequencyData(dataArray);
+  const bars = document.querySelectorAll('.vis-bar');
+  bars.forEach((bar, i) => {
+    const val = dataArray[i * 4] || 0;
+    const h = Math.max(8, (val / 255) * 40);
+    bar.style.height = h + 'px';
+    bar.style.opacity = 0.5 + (val / 255) * 0.5;
+  });
+  visFrame = requestAnimationFrame(updateVisualizer);
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -103,6 +165,7 @@ let conversationHistory = [];
 let lastTranscript   = '';
 let lastReply        = '';
 let lastLeadData     = {};
+let lastAudioBase64   = null;
 
 function resetVoiceUI() {
   setVoiceState('idle');
@@ -143,6 +206,18 @@ async function toggleRecording() {
 async function startRecording() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    
+    // Init visualizer if in call mode
+    if (isCallMode) {
+      if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioContext.createAnalyser();
+      const source = audioContext.createMediaStreamSource(stream);
+      source.connect(analyser);
+      analyser.fftSize = 64;
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
+      updateVisualizer();
+    }
+
     audioChunks = [];
     mediaRecorder = new MediaRecorder(stream, { mimeType: getSupportedMimeType() });
     mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunks.push(e.data); };
@@ -152,7 +227,12 @@ async function startRecording() {
     };
     mediaRecorder.start(100);
     isRecording = true;
-    setVoiceState('recording');
+    
+    if (isCallMode) {
+      document.getElementById('call-ai-status').textContent = 'Listening...';
+    } else {
+      setVoiceState('recording');
+    }
   } catch (err) {
     console.error('Mic error:', err);
     if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
@@ -167,7 +247,12 @@ function stopRecording() {
   if (mediaRecorder && mediaRecorder.state !== 'inactive') {
     mediaRecorder.stop();
     isRecording = false;
-    setVoiceState('processing');
+    
+    if (isCallMode) {
+      document.getElementById('call-ai-status').textContent = 'Processing...';
+    } else {
+      setVoiceState('processing');
+    }
   }
 }
 
@@ -188,8 +273,10 @@ async function processAudioChunks() {
     fd.append('conversation_history', JSON.stringify(conversationHistory));
   }
 
-  showScreen('processing');
-  runProcessingAnimation(false);
+  if (!isCallMode) {
+    showScreen('processing');
+    runProcessingAnimation(false);
+  }
 
   try {
     const data = await api.post('/api/voice-input', fd, true);
@@ -235,11 +322,39 @@ function handleAIResponse(data) {
   conversationHistory.push({ role: 'user',      content: lastTranscript });
   conversationHistory.push({ role: 'assistant', content: lastReply });
 
-  document.getElementById('response-transcript').textContent = lastTranscript;
-  document.getElementById('response-ai-text').textContent    = lastReply;
+  // Update UI based on mode
+  if (isCallMode) {
+    document.getElementById('call-ai-status').textContent = 'Speaking...';
+    showScreen('call-mode');
+  } else {
+    document.getElementById('response-transcript').textContent = lastTranscript;
+    document.getElementById('response-ai-text').textContent    = lastReply;
+    updateLeadPreview(lastLeadData);
+    showScreen('response');
+  }
 
-  updateLeadPreview(lastLeadData);
-  showScreen('response');
+  // Play ElevenLabs audio if available
+  lastAudioBase64 = data.audio_base64 || null;
+  if (lastAudioBase64) {
+    playBase64Audio(lastAudioBase64);
+  }
+}
+
+function playBase64Audio(base64) {
+  const audio = new Audio("data:audio/mpeg;base64," + base64);
+  audio.onended = () => {
+    if (isCallMode) {
+      document.getElementById('call-ai-status').textContent = 'Listening...';
+      // Automatically record next turn in call mode
+      startRecording();
+    }
+  };
+  audio.play().catch(err => {
+    // Silently ignore autoplay restrictions or log if critical
+    if (err.name !== 'NotAllowedError') {
+      console.error("Audio playback failed:", err);
+    }
+  });
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -326,11 +441,18 @@ async function endConversation() {
 }
 
 function playVoiceResponse() {
+  const btn = document.getElementById('btn-play-response');
+  
+  if (lastAudioBase64) {
+    playBase64Audio(lastAudioBase64);
+    return;
+  }
+
   if (!lastReply || !('speechSynthesis' in window)) {
     showToast('Voice synthesis not supported.', 'error');
     return;
   }
-  const btn = document.getElementById('btn-play-response');
+  
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(lastReply);
   u.rate = 0.95; u.lang = 'en-US';
@@ -382,6 +504,41 @@ async function adminLogin(e) {
   }
 }
 
+async function adminRegister(e) {
+  e.preventDefault();
+  const username = document.getElementById('reg-username').value.trim();
+  const email    = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const errEl    = document.getElementById('register-error');
+
+  errEl.style.display = 'none';
+  try {
+    await api.post('/api/admin/register', { username, email, password });
+    showToast('Registration successful! Please login.', 'success');
+    showScreen('admin-login');
+  } catch (err) {
+    errEl.textContent = 'Registration failed: ' + err.message;
+    errEl.style.display = 'block';
+  }
+}
+
+async function adminResetPassword(e) {
+  e.preventDefault();
+  const username = document.getElementById('reset-username').value.trim();
+  const new_password = document.getElementById('reset-password-val').value;
+  const errEl    = document.getElementById('reset-error');
+
+  errEl.style.display = 'none';
+  try {
+    await api.post('/api/admin/password-reset', { username, new_password });
+    showToast('Password updated! Please login.', 'success');
+    showScreen('admin-login');
+  } catch (err) {
+    errEl.textContent = 'Reset failed: ' + err.message;
+    errEl.style.display = 'block';
+  }
+}
+
 function adminLogout() {
   api.token = null;
   sessionStorage.removeItem('vocaldesk_token');
@@ -399,10 +556,24 @@ async function loadDashboard() {
   if (!api.token) { showScreen('admin-login'); return; }
 
   try {
-    const stats = await api.get('/api/leads/stats');
+    // Parallel fetch for stats and detailed analytics
+    const [stats, analytics] = await Promise.all([
+      api.get('/api/leads/stats'),
+      api.get('/api/analytics/summary')
+    ]);
+
     document.getElementById('stat-total').textContent    = stats.total_leads   ?? '—';
     document.getElementById('stat-web').textContent      = stats.web_leads     ?? '—';
     document.getElementById('stat-whatsapp').textContent = stats.whatsapp_leads ?? '—';
+    
+    // Update response time from analytics if available
+    if (analytics.ai_metrics && analytics.ai_metrics.length) {
+      const latestLatency = analytics.ai_metrics.find(m => m.metric_name === 'api_latency');
+      if (latestLatency) {
+        document.getElementById('stat-latency').textContent = latestLatency.metric_value.toFixed(1) + 's';
+      }
+    }
+
     currentDashboardLeads = stats.recent_leads || [];
     renderRecentActivity(currentDashboardLeads);
   } catch (err) {

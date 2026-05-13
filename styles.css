@@ -971,6 +971,24 @@ body {
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+ 
+.form-footer {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+.form-footer a {
+  color: var(--teal);
+  text-decoration: none;
+  font-weight: 600;
+}
+.form-footer a:hover { text-decoration: underline; }
 
 .admin-footer-note {
   display: flex;
@@ -1529,3 +1547,115 @@ body {
   background: var(--teal-10);
   transform: translateX(4px);
 }
+/* ═══════════════════════════════════════════════════════════════
+   CALL MODE UI
+════════════════════════════════════════════════════════════════ */
+.landing-ctas { display: flex; gap: 16px; margin-top: 12px; }
+.btn-call-cta { background: linear-gradient(135deg, #0d9488, #0f766e); }
+
+.call-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 60px 24px;
+  color: white;
+}
+
+.call-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.1);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  backdrop-filter: blur(10px);
+}
+
+.call-avatar-wrap {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.call-avatar {
+  width: 100px;
+  height: 100px;
+  background: var(--teal);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  box-shadow: 0 0 30px rgba(0,169,165,0.4);
+}
+
+.call-pulse-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--teal);
+  border-radius: 50%;
+  opacity: 0;
+  animation: call-pulse 2s infinite;
+}
+
+#call-pulse-2 { animation-delay: 1s; }
+
+@keyframes call-pulse {
+  0% { transform: scale(0.6); opacity: 0.8; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.call-timer {
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-family: monospace;
+  letter-spacing: 2px;
+  margin-top: 20px;
+}
+
+.call-info { text-align: center; }
+.call-ai-name { font-size: 1.5rem; margin-bottom: 4px; }
+.call-ai-sub { color: rgba(255,255,255,0.6); font-size: 0.95rem; }
+
+.btn-end-call {
+  background: #ef4444;
+  border: none;
+  border-radius: 30px;
+  padding: 16px 40px;
+  color: white;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+}
+
+.btn-end-call:hover { transform: scale(1.05); background: #dc2626; }
+.btn-end-call:active { transform: scale(0.95); }
+
+/* Real-time Visualizer */
+.call-visualizer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 40px;
+  margin-top: -20px;
+}
+.vis-bar {
+  width: 4px;
+  height: 8px;
+  background: var(--teal-light);
+  border-radius: 2px;
+  transition: height 0.1s ease;
+}
+
