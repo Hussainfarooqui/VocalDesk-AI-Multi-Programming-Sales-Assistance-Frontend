@@ -1070,7 +1070,7 @@ body {
 }
 .btn-dash-action:hover { background: var(--teal-10); color: var(--teal); border-color: var(--teal); }
 
-.btn-logout { }
+
 .btn-logout:hover { background: rgba(239,68,68,0.08); color: #ef4444; border-color: rgba(239,68,68,0.3); }
 
 .dash-body {
