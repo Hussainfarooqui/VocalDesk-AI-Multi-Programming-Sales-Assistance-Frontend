@@ -141,16 +141,44 @@ function _onScreenEnter(name) {
   if (name === 'call-mode')       { /* init call specific state */ }
 }
 
+let vadState = 'idle'; // 'idle', 'speaking'
+let silenceTimer = null;
+const VAD_THRESHOLD = 15;
+const SILENCE_MS = 1500;
+
 function updateVisualizer() {
   if (!isCallMode || !analyser) return;
   analyser.getByteFrequencyData(dataArray);
+  
+  let total = 0;
   const bars = document.querySelectorAll('.vis-bar');
   bars.forEach((bar, i) => {
     const val = dataArray[i * 4] || 0;
+    total += val;
     const h = Math.max(8, (val / 255) * 40);
     bar.style.height = h + 'px';
     bar.style.opacity = 0.5 + (val / 255) * 0.5;
   });
+  
+  // VAD logic
+  if (isRecording && bars.length > 0) {
+    const avg = total / bars.length;
+    if (avg > VAD_THRESHOLD) {
+      if (vadState === 'idle') vadState = 'speaking';
+      if (silenceTimer) {
+        clearTimeout(silenceTimer);
+        silenceTimer = null;
+      }
+    } else {
+      if (vadState === 'speaking' && !silenceTimer) {
+        silenceTimer = setTimeout(() => {
+          vadState = 'idle';
+          stopRecording(); // Trigger AI response
+        }, SILENCE_MS);
+      }
+    }
+  }
+
   visFrame = requestAnimationFrame(updateVisualizer);
 }
 
@@ -215,6 +243,12 @@ async function startRecording() {
       source.connect(analyser);
       analyser.fftSize = 64;
       dataArray = new Uint8Array(analyser.frequencyBinCount);
+      
+      vadState = 'idle';
+      if (silenceTimer) clearTimeout(silenceTimer);
+      silenceTimer = null;
+      if (visFrame) cancelAnimationFrame(visFrame);
+      
       updateVisualizer();
     }
 
@@ -314,6 +348,29 @@ async function sendTextMessage() {
   }
 }
 
+async function sendChatTextMessage() {
+  const inp = document.getElementById('chat-text-input-field');
+  const msg = inp.value.trim();
+  if (!msg) return;
+  inp.value = '';
+  lastTranscript = msg;
+
+  showScreen('processing');
+  runProcessingAnimation(true);
+
+  try {
+    const data = await api.post('/api/text-input', {
+      message: msg,
+      conversation_history: conversationHistory,
+    });
+    handleAIResponse(data);
+  } catch (err) {
+    console.error('Chat text input error:', err);
+    if (!navigator.onLine) showScreen('error-internet');
+    else { showToast('Error: ' + err.message, 'error'); showScreen('response'); }
+  }
+}
+
 function handleAIResponse(data) {
   lastTranscript = data.transcript || lastTranscript;
   lastReply      = data.reply_text || '';
@@ -327,8 +384,7 @@ function handleAIResponse(data) {
     document.getElementById('call-ai-status').textContent = 'Speaking...';
     showScreen('call-mode');
   } else {
-    document.getElementById('response-transcript').textContent = lastTranscript;
-    document.getElementById('response-ai-text').textContent    = lastReply;
+    renderChatHistory();
     updateLeadPreview(lastLeadData);
     showScreen('response');
   }
@@ -337,6 +393,63 @@ function handleAIResponse(data) {
   lastAudioBase64 = data.audio_base64 || null;
   if (lastAudioBase64) {
     playBase64Audio(lastAudioBase64);
+  }
+}
+
+function renderChatHistory() {
+  const container = document.getElementById('chat-messages');
+  if (!container) return;
+  container.innerHTML = '';
+  
+  conversationHistory.forEach((msg, index) => {
+    if (msg.role === 'user') {
+      container.innerHTML += `
+      <div class="chat-row user-row">
+        <div class="chat-bubble user-bubble">
+          <p>${escapeHtml(msg.content)}</p>
+        </div>
+        <div class="chat-avatar user-avatar">
+          <svg viewBox="0 0 24 24" fill="white" width="14" height="14">
+            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+          </svg>
+        </div>
+      </div>
+      `;
+    } else if (msg.role === 'assistant') {
+      const isLast = index === conversationHistory.length - 1;
+      let playBtn = '';
+      if (isLast) {
+        playBtn = `
+          <button class="btn-play-voice" id="btn-play-response" onclick="playVoiceResponse()">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+              <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd" />
+            </svg>
+            Play voice response
+            <span class="btn-play-sparkle">✦</span>
+          </button>
+        `;
+      }
+      container.innerHTML += `
+      <div class="chat-row ai-row">
+        <div class="chat-avatar ai-avatar-icon">
+          <svg viewBox="0 0 24 24" fill="white" width="14" height="14">
+            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="chat-bubble ai-bubble">
+          <p>${escapeHtml(msg.content)}</p>
+          ${playBtn}
+          <p class="ai-generated-label">⚡ Generated by AI</p>
+        </div>
+      </div>
+      `;
+    }
+  });
+
+  // Scroll the screen to bottom
+  const screen = document.getElementById('screen-response');
+  if (screen) {
+    setTimeout(() => { screen.scrollTop = screen.scrollHeight; }, 50);
   }
 }
 

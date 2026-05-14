@@ -1659,3 +1659,12 @@ body {
   transition: height 0.1s ease;
 }
 
+/* Call Timer Styles */
+.call-timer {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--teal);
+  text-align: center;
+  margin: 16px 0;
+  letter-spacing: 2px;
+}
