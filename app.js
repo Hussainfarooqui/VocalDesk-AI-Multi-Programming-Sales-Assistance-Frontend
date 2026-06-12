@@ -34,7 +34,7 @@ function initParticles() {
 // API CLIENT
 // ════════════════════════════════════════════════════════════════
 
-const API_BASE = window.location.origin.includes(':8002')
+const API_BASE = (window.location.origin.includes('localhost') || window.location.protocol === 'file:')
   ? 'http://localhost:8001'
   : window.location.origin;
 
@@ -77,6 +77,7 @@ const api = {
 // ════════════════════════════════════════════════════════════════
 
 let _prevScreen = 'landing';
+let currentScreen = 'landing';
 
 function showScreen(name) {
   const cur = document.querySelector('.screen.active');
@@ -84,12 +85,46 @@ function showScreen(name) {
     _prevScreen = cur.id.replace('screen-', '');
     cur.classList.remove('active');
   }
+  currentScreen = name;
   const next = document.getElementById(`screen-${name}`);
   if (next) {
     next.classList.add('active');
     next.scrollTop = 0;
     _onScreenEnter(name);
   }
+  
+  // Update back button visibility
+  const btnBack = document.getElementById('btn-back');
+  if (btnBack) {
+    if (name === 'landing' || name === 'admin-login') {
+      btnBack.style.display = 'none';
+    } else {
+      btnBack.style.display = 'flex';
+    }
+  }
+}
+
+function goBack() {
+  if (currentScreen === 'admin-dashboard') showScreen('admin-login');
+  else if (currentScreen === 'voice-input') showScreen('landing');
+  else if (currentScreen === 'summary') showScreen('landing');
+  else showScreen('landing');
+}
+
+function toggleTheme() {
+  const isDark = document.body.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    document.body.removeAttribute('data-theme');
+    localStorage.setItem('vocaldesk_theme', 'light');
+  } else {
+    document.body.setAttribute('data-theme', 'dark');
+    localStorage.setItem('vocaldesk_theme', 'dark');
+  }
+}
+
+// Restore theme
+if (localStorage.getItem('vocaldesk_theme') === 'dark') {
+  document.body.setAttribute('data-theme', 'dark');
 }
 
 // ════════════════════════════════════════════════════════════════
