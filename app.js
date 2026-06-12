@@ -301,6 +301,18 @@ async function processAudioChunks() {
   if (audioChunks.length === 0) { showScreen('error-voice'); return; }
 
   const blob = new Blob(audioChunks, { type: getSupportedMimeType() || 'audio/webm' });
+  // Check if the blob is too small (likely silence)
+  if (blob.size < 1000) {
+    console.warn('Audio blob too small, likely silence:', blob.size);
+    if (isCallMode) {
+      // In call mode, just restart recording silently
+      startRecording();
+      return;
+    }
+    showScreen('error-voice');
+    return;
+  }
+
   const fd = new FormData();
   fd.append('audio', blob, 'recording.webm');
   if (conversationHistory.length) {
@@ -320,7 +332,13 @@ async function processAudioChunks() {
     if (!navigator.onLine || err.message.includes('fetch')) {
       showScreen('error-internet');
     } else {
-      showScreen('error-voice');
+      // API/backend error — show toast, don't go to error-voice screen
+      showToast('AI processing error. Please try again.', 'error');
+      if (isCallMode) {
+        document.getElementById('call-ai-status').textContent = 'Error — tap to retry';
+      } else {
+        showScreen('voice-input');
+      }
     }
   }
 }
@@ -389,10 +407,19 @@ function handleAIResponse(data) {
     showScreen('response');
   }
 
-  // Play ElevenLabs audio if available
+  // Play audio response — ElevenLabs first, then browser speechSynthesis fallback
   lastAudioBase64 = data.audio_base64 || null;
   if (lastAudioBase64) {
     playBase64Audio(lastAudioBase64);
+  } else if (lastReply && 'speechSynthesis' in window) {
+    // No ElevenLabs audio — use browser TTS as fallback
+    playSpeechSynthesisFallback(lastReply);
+  } else if (isCallMode) {
+    // No audio at all in call mode — restart recording after a pause
+    setTimeout(() => {
+      document.getElementById('call-ai-status').textContent = 'Listening...';
+      startRecording();
+    }, 1000);
   }
 }
 
@@ -458,16 +485,54 @@ function playBase64Audio(base64) {
   audio.onended = () => {
     if (isCallMode) {
       document.getElementById('call-ai-status').textContent = 'Listening...';
-      // Automatically record next turn in call mode
       startRecording();
     }
   };
+  audio.onerror = () => {
+    console.warn('Base64 audio playback error — falling back to speechSynthesis');
+    if (lastReply && 'speechSynthesis' in window) {
+      playSpeechSynthesisFallback(lastReply);
+    } else if (isCallMode) {
+      setTimeout(() => {
+        document.getElementById('call-ai-status').textContent = 'Listening...';
+        startRecording();
+      }, 1000);
+    }
+  };
   audio.play().catch(err => {
-    // Silently ignore autoplay restrictions or log if critical
-    if (err.name !== 'NotAllowedError') {
-      console.error("Audio playback failed:", err);
+    console.warn('Audio autoplay blocked:', err.name);
+    // If autoplay blocked, fall back to speechSynthesis (doesn't need gesture in most cases)
+    if (lastReply && 'speechSynthesis' in window) {
+      playSpeechSynthesisFallback(lastReply);
+    } else if (isCallMode) {
+      setTimeout(() => {
+        document.getElementById('call-ai-status').textContent = 'Listening...';
+        startRecording();
+      }, 1000);
     }
   });
+}
+
+function playSpeechSynthesisFallback(text) {
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.95;
+  u.lang = 'en-US';
+  u.onend = () => {
+    if (isCallMode) {
+      document.getElementById('call-ai-status').textContent = 'Listening...';
+      startRecording();
+    }
+  };
+  u.onerror = () => {
+    if (isCallMode) {
+      setTimeout(() => {
+        document.getElementById('call-ai-status').textContent = 'Listening...';
+        startRecording();
+      }, 1000);
+    }
+  };
+  window.speechSynthesis.speak(u);
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -664,6 +729,7 @@ function adminLogout() {
 // ════════════════════════════════════════════════════════════════
 
 let currentDashboardLeads = [];
+let dashChartsInit = false;
 
 async function loadDashboard() {
   if (!api.token) { showScreen('admin-login'); return; }
@@ -672,23 +738,33 @@ async function loadDashboard() {
     // Parallel fetch for stats and detailed analytics
     const [stats, analytics] = await Promise.all([
       api.get('/api/leads/stats'),
-      api.get('/api/analytics/summary')
+      api.get('/api/analytics/summary').catch(() => ({}))
     ]);
 
-    document.getElementById('stat-total').textContent    = stats.total_leads   ?? '—';
-    document.getElementById('stat-web').textContent      = stats.web_leads     ?? '—';
-    document.getElementById('stat-whatsapp').textContent = stats.whatsapp_leads ?? '—';
-    
+    document.getElementById('stat-total').textContent    = stats.total_leads   ?? '0';
+    document.getElementById('stat-web').textContent      = stats.web_leads     ?? '0';
+    document.getElementById('stat-whatsapp').textContent = stats.whatsapp_leads ?? '0';
+
+    // Topbar lead count
+    const dbCount = document.getElementById('db-lead-count');
+    if (dbCount) dbCount.textContent = stats.total_leads ?? '0';
+
     // Update response time from analytics if available
     if (analytics.ai_metrics && analytics.ai_metrics.length) {
       const latestLatency = analytics.ai_metrics.find(m => m.metric_name === 'api_latency');
       if (latestLatency) {
-        document.getElementById('stat-latency').textContent = latestLatency.metric_value.toFixed(1) + 's';
+        const el = document.getElementById('stat-latency');
+        if (el) el.textContent = latestLatency.metric_value.toFixed(1) + 's';
       }
     }
 
     currentDashboardLeads = stats.recent_leads || [];
     renderRecentActivity(currentDashboardLeads);
+    loadLeadsTable(currentDashboardLeads);
+    loadConversationList(currentDashboardLeads);
+
+    // Init charts once
+    if (!dashChartsInit) { initDashCharts(); dashChartsInit = true; }
   } catch (err) {
     if (err.message.includes('401') || err.message.includes('credentials')) adminLogout();
     else showToast('Dashboard load failed: ' + err.message, 'error');
@@ -734,6 +810,191 @@ function openLead(id) {
 function closeLeadModal() {
   const modal = document.getElementById('lead-modal');
   if (modal) modal.classList.remove('active');
+}
+
+// ═══ Dashboard Tab Navigation ═══
+
+const TAB_TITLES = {
+  overview:      'Overview',
+  conversations: 'Conversations',
+  voicecalls:    'Voice Calls',
+  analytics:     'Analytics',
+  leads:         'Lead Database',
+};
+
+function goTab(tabId, btn) {
+  // Hide all tabs
+  document.querySelectorAll('.db-tab').forEach(t => t.classList.remove('active'));
+  // Deactivate all nav buttons
+  document.querySelectorAll('.db-nav-btn').forEach(b => b.classList.remove('active'));
+
+  // Show target tab
+  const tab = document.getElementById('tab-' + tabId);
+  if (tab) tab.classList.add('active');
+  // Activate nav button
+  if (btn) btn.classList.add('active');
+
+  // Update topbar title
+  const title = document.getElementById('db-page-title');
+  if (title) title.textContent = TAB_TITLES[tabId] || tabId;
+}
+
+// ═══ Leads Table ═══
+
+function loadLeadsTable(leads) {
+  const tbody = document.getElementById('db-leadsTableBody');
+  const badge = document.getElementById('db-lead-badge');
+  if (!tbody) return;
+
+  if (badge) badge.textContent = (leads.length || 0) + ' leads';
+
+  if (!leads.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted)">No leads yet. Start a voice conversation to capture leads!</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = leads.map((l, i) => {
+    const src = l.source_channel === 'whatsapp'
+      ? '<span class="db-chip db-chip-green">WhatsApp</span>'
+      : '<span class="db-chip db-chip-blue">Web</span>';
+    return `<tr>
+      <td style="color:var(--text-muted)">#${l.id || i+1}</td>
+      <td style="font-weight:600">${escapeHtml(l.name || 'Anonymous')}</td>
+      <td>${escapeHtml(l.email || '—')}</td>
+      <td>${src}</td>
+      <td style="text-align:right">${escapeHtml(l.product_interest || '—')}</td>
+      <td style="text-align:right"><span class="db-chip db-chip-teal">Captured</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══ Conversation List ═══
+
+function loadConversationList(leads) {
+  const list = document.getElementById('db-convList');
+  if (!list) return;
+
+  if (!leads.length) {
+    list.innerHTML = '<p style="font-size:12px;color:var(--text-muted);text-align:center;padding:20px">No active sessions yet.</p>';
+    return;
+  }
+
+  list.innerHTML = leads.map(l => {
+    const initials = (l.name || 'A').slice(0,2).toUpperCase();
+    return `<div class="db-ci" onclick="selectConversation('${l.id}')">
+      <div class="db-chat-av">${initials}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:600;color:var(--text-primary)">${escapeHtml(l.name || 'Anonymous')}</div>
+        <div style="font-size:10px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(l.product_interest || 'Sales inquiry')}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selectConversation(id) {
+  const lead = currentDashboardLeads.find(l => l.id === id);
+  if (!lead) return;
+
+  // Highlight selected
+  document.querySelectorAll('.db-ci').forEach(c => c.classList.remove('sel'));
+  event.currentTarget.classList.add('sel');
+
+  // Update chat header
+  const initials = (lead.name || 'A').slice(0,2).toUpperCase();
+  document.getElementById('db-chatAv').textContent = initials;
+  document.getElementById('db-chatName').textContent = lead.name || 'Anonymous';
+  document.getElementById('db-chatSub').textContent = lead.email || (lead.source_channel === 'whatsapp' ? 'WhatsApp Lead' : 'Web Lead');
+
+  // Render conversation summary as chat bubbles
+  const box = document.getElementById('db-chatBox');
+  const summary = lead.conversation_summary || 'No transcript recorded.';
+  box.innerHTML = `
+    <div class="db-msg-label r">User</div>
+    <div class="db-msg db-msg-u">${escapeHtml(lead.product_interest || 'Sales inquiry')}</div>
+    <div class="db-msg-label">VocalDesk AI</div>
+    <div class="db-msg db-msg-b">${escapeHtml(summary)}</div>
+  `;
+}
+
+// ═══ Chart.js Dashboard Charts ═══
+
+function initDashCharts() {
+  if (typeof Chart === 'undefined') { console.warn('Chart.js not loaded'); return; }
+
+  const tealRgba = 'rgba(0,169,165,';
+  const defFont = { family: "'Inter','Segoe UI',sans-serif", size: 11, color: '#94a3b8' };
+
+  const gridOpts = { color: 'rgba(0,0,0,0.04)', drawBorder: false };
+  const tickOpts = { font: { size: 10 }, color: '#94a3b8', padding: 6 };
+
+  // Hourly Activity (Overview tab)
+  const hCtx = document.getElementById('hourlyChart');
+  if (hCtx) {
+    new Chart(hCtx, {
+      type: 'bar',
+      data: {
+        labels: ['9am','10am','11am','12pm','1pm','2pm','3pm','4pm','5pm','6pm','7pm','8pm'],
+        datasets: [{
+          data: [3,5,8,12,7,10,14,9,6,4,2,1],
+          backgroundColor: tealRgba + '0.6)',
+          borderRadius: 4,
+          barThickness: 18,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, grid: gridOpts, ticks: tickOpts }, x: { grid: { display: false }, ticks: tickOpts } }
+      }
+    });
+  }
+
+  // Weekly Call Volume (Voice Calls tab)
+  const wCtx = document.getElementById('weeklyChart');
+  if (wCtx) {
+    new Chart(wCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+        datasets: [{
+          data: [4,7,5,9,6,2,1],
+          backgroundColor: tealRgba + '0.55)',
+          borderRadius: 4,
+          barThickness: 28,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, grid: gridOpts, ticks: tickOpts }, x: { grid: { display: false }, ticks: tickOpts } }
+      }
+    });
+  }
+
+  // Lead Conversion Trend (Analytics tab)
+  const rCtx = document.getElementById('revenueChart');
+  if (rCtx) {
+    new Chart(rCtx, {
+      type: 'line',
+      data: {
+        labels: ['Day 1','Day 2','Day 3','Day 4','Day 5','Day 6','Day 7'],
+        datasets: [{
+          data: [2,5,3,8,6,10,7],
+          borderColor: 'rgb(0,169,165)',
+          backgroundColor: tealRgba + '0.08)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 4,
+          pointBackgroundColor: 'rgb(0,169,165)',
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, grid: gridOpts, ticks: tickOpts }, x: { grid: { display: false }, ticks: tickOpts } }
+      }
+    });
+  }
 }
 
 // ════════════════════════════════════════════════════════════════

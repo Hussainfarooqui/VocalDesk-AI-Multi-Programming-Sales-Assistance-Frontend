@@ -580,193 +580,272 @@
        SCREEN 8: ADMIN DASHBOARD
   ══════════════════════════════════════════════════════════════ -->
   <div id="screen-admin-dashboard" class="screen">
-    <!-- Header -->
-    <div class="dash-header">
-      <div class="dash-logo">
-        <div class="dash-logo-icon">
-          <svg viewBox="0 0 24 24" fill="white" width="16" height="16">
-            <path fill-rule="evenodd"
-              d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"
-              clip-rule="evenodd" />
-          </svg>
-        </div>
-        <div>
-          <div class="dash-logo-name">Admin Dashboard</div>
-          <div class="dash-logo-sub">VocalDesk AI System Overview</div>
-        </div>
-      </div>
-      <div class="dash-header-actions">
-        <button class="btn-dash-action" onclick="showScreen('architecture')">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
-            <path fill-rule="evenodd"
-              d="M3 4a1 1 0 000 2h11.586l-2.293 2.293a1 1 0 101.414 1.414l4-4a1 1 0 000-1.414l-4-4a1 1 0 10-1.414 1.414L14.586 4H3zm13 12a1 1 0 100-2H4.414l2.293-2.293a1 1 0 00-1.414-1.414l-4 4a1 1 0 000 1.414l4 4a1 1 0 001.414-1.414L4.414 16H16z"
-              clip-rule="evenodd" />
-          </svg>
-          Architecture
-        </button>
-        <button class="btn-dash-action btn-logout" id="btn-logout" onclick="adminLogout()">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
-            <path fill-rule="evenodd"
-              d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
-              clip-rule="evenodd" />
-          </svg>
-          Logout
-        </button>
-      </div>
-    </div>
+    <div class="db-layout">
 
-    <div class="dash-body">
-      <!-- 4 stat cards -->
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-card-header">
-            <div class="stat-icon-box teal-box">
-              <svg viewBox="0 0 20 20" fill="white" width="18" height="18">
-                <path
-                  d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-              </svg>
-            </div>
-            <span class="stat-trend trend-up" id="stat-trend-1">↑ +12%</span>
+      <!-- ── Sidebar ── -->
+      <aside class="db-sidebar">
+        <div class="db-brand">
+          <div class="db-brand-logo">
+            <svg viewBox="0 0 24 24" fill="white" width="18" height="18">
+              <path fill-rule="evenodd"
+                d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"
+                clip-rule="evenodd" />
+            </svg>
           </div>
-          <div class="stat-value" id="stat-total">—</div>
-          <div class="stat-label">Total Leads</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-header">
-            <div class="stat-icon-box orange-box">
-              <svg viewBox="0 0 20 20" fill="white" width="18" height="18">
-                <path fill-rule="evenodd"
-                  d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
-                  clip-rule="evenodd" />
-              </svg>
-            </div>
-            <span class="stat-trend trend-up" id="stat-trend-2">↑ +23%</span>
+          <div>
+            <div class="db-brand-name">VocalDesk</div>
+            <div class="db-brand-sub">AI Sales Assistant</div>
           </div>
-          <div class="stat-value" id="stat-web">—</div>
-          <div class="stat-label">Web Leads</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-card-header">
-            <div class="stat-icon-box teal-box">
-              <svg viewBox="0 0 20 20" fill="white" width="18" height="18">
-                <path fill-rule="evenodd"
-                  d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
-                  clip-rule="evenodd" />
-              </svg>
-            </div>
-            <span class="stat-trend trend-up">↑ +8%</span>
-          </div>
-          <div class="stat-value" id="stat-whatsapp">—</div>
-          <div class="stat-label">WhatsApp Leads</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-header">
-            <div class="stat-icon-box orange-box">
-              <svg viewBox="0 0 20 20" fill="white" width="18" height="18">
-                <path fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                  clip-rule="evenodd" />
-              </svg>
-            </div>
-            <span class="stat-trend trend-down">↓ -5%</span>
-          </div>
-          <div class="stat-value" id="stat-latency">1.2s</div>
-          <div class="stat-label">Response Time</div>
-        </div>
-      </div>
 
-      <!-- Two panel section -->
-      <div class="dash-panels">
-        <!-- System Health panel -->
-        <div class="dash-panel">
-          <div class="dash-panel-header">
-            <div class="panel-header-icon teal-box" style="width:32px;height:32px;border-radius:8px">
-              <svg viewBox="0 0 20 20" fill="white" width="16" height="16">
-                <path fill-rule="evenodd"
-                  d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z"
-                  clip-rule="evenodd" />
-              </svg>
+        <div class="db-nav-section">Main</div>
+        <div class="db-nav">
+          <button class="db-nav-btn active" onclick="goTab('overview',this)" id="nav-overview">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+            Overview
+          </button>
+          <button class="db-nav-btn" onclick="goTab('conversations',this)" id="nav-conversations">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/></svg>
+            Conversations
+          </button>
+          <button class="db-nav-btn" onclick="goTab('voicecalls',this)" id="nav-voicecalls">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
+            Voice Calls
+          </button>
+        </div>
+
+        <div class="db-nav-section">Insights</div>
+        <div class="db-nav">
+          <button class="db-nav-btn" onclick="goTab('analytics',this)" id="nav-analytics">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+            Analytics
+          </button>
+          <button class="db-nav-btn" onclick="goTab('leads',this)" id="nav-leads">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>
+            Leads
+          </button>
+        </div>
+
+        <div class="db-sidebar-divider"></div>
+
+        <!-- Status indicator -->
+        <div class="db-status-box">
+          <div><span class="db-status-dot"></span><span class="db-status-txt">Agent Online</span></div>
+          <div class="db-status-sub">AI System Active</div>
+        </div>
+
+        <!-- Sidebar bottom actions -->
+        <div class="db-sidebar-bottom">
+          <button class="db-nav-btn" onclick="showScreen('architecture')">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M3 4a1 1 0 000 2h11.586l-2.293 2.293a1 1 0 101.414 1.414l4-4a1 1 0 000-1.414l-4-4a1 1 0 10-1.414 1.414L14.586 4H3zm13 12a1 1 0 100-2H4.414l2.293-2.293a1 1 0 00-1.414-1.414l-4 4a1 1 0 000 1.414l4 4a1 1 0 001.414-1.414L4.414 16H16z" clip-rule="evenodd"/></svg>
+            Architecture
+          </button>
+          <button class="db-nav-btn db-nav-logout" onclick="adminLogout()" id="btn-logout">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
+            Logout
+          </button>
+        </div>
+      </aside>
+
+      <!-- ── Main Content ── -->
+      <div class="db-main">
+        <!-- Topbar -->
+        <div class="db-topbar">
+          <div class="db-topbar-title" id="db-page-title">Overview</div>
+          <div class="db-topbar-right">
+            <div class="db-topbar-badge">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+              Live Dashboard
             </div>
-            <h3 class="panel-title">System Health <span class="sparkle" aria-hidden="true">✦</span></h3>
-          </div>
-          <div class="health-list">
-            <div class="health-item">
-              <div class="health-item-icon teal-box-sm">
-                <svg viewBox="0 0 16 16" fill="white" width="10" height="10">
-                  <path fill-rule="evenodd"
-                    d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0013 8H3a7 7 0 006 6.93V17H6a1 1 0 100 2h4a1 1 0 100-2H8v-2.07z"
-                    clip-rule="evenodd" />
-                </svg>
-              </div>
-              <div class="health-item-info">
-                <span class="health-name">Voice Recognition</span>
-                <span class="health-uptime">99.9% uptime</span>
-              </div>
-              <span class="health-badge">● Operational</span>
-            </div>
-            <div class="health-item">
-              <div class="health-item-icon teal-box-sm">
-                <svg viewBox="0 0 16 16" fill="white" width="10" height="10">
-                  <path fill-rule="evenodd"
-                    d="M11.3 1.046A1 1 0 0112 2v3h2a1 1 0 01.82 1.573l-5 7A1 1 0 018 13v-3H6a1 1 0 01-.82-1.573l5-7a1 1 0 011.12-.38z"
-                    clip-rule="evenodd" />
-                </svg>
-              </div>
-              <div class="health-item-info">
-                <span class="health-name">AI Processing</span>
-                <span class="health-uptime">99.7% uptime</span>
-              </div>
-              <span class="health-badge">● Operational</span>
-            </div>
-            <div class="health-item">
-              <div class="health-item-icon teal-box-sm">
-                <svg viewBox="0 0 16 16" fill="white" width="10" height="10">
-                  <path fill-rule="evenodd"
-                    d="M9.383 1.076A1 1 0 0110 2v10a1 1 0 01-1.707.707L4.586 9H2a1 1 0 01-1-1V6a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217z"
-                    clip-rule="evenodd" />
-                </svg>
-              </div>
-              <div class="health-item-info">
-                <span class="health-name">Text-to-Speech</span>
-                <span class="health-uptime">99.8% uptime</span>
-              </div>
-              <span class="health-badge">● Operational</span>
-            </div>
-            <div class="health-item">
-              <div class="health-item-icon teal-box-sm">
-                <svg viewBox="0 0 16 16" fill="white" width="10" height="10">
-                  <path
-                    d="M3 2a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2H3zm4 3h2v5H7V5zm-2 2h2v3H5V7zm6 0h-2v3h2V7z" />
-                </svg>
-              </div>
-              <div class="health-item-info">
-                <span class="health-name">Database</span>
-                <span class="health-uptime">100% uptime</span>
-              </div>
-              <span class="health-badge">● Operational</span>
+            <div class="db-topbar-badge">
+              <span class="db-status-dot" style="width:6px;height:6px"></span>
+              <span id="db-lead-count">0</span> leads tracked
             </div>
           </div>
         </div>
 
-        <!-- Recent Activity / Leads panel -->
-        <div class="dash-panel">
-          <div class="dash-panel-header">
-            <div class="panel-header-icon orange-box" style="width:32px;height:32px;border-radius:8px">
-              <svg viewBox="0 0 20 20" fill="white" width="16" height="16">
-                <path fill-rule="evenodd"
-                  d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
-                  clip-rule="evenodd" />
-              </svg>
+        <div class="db-content">
+
+          <!-- ═══ TAB: OVERVIEW ═══ -->
+          <div class="db-tab active" id="tab-overview">
+            <!-- Stat cards row -->
+            <div class="db-stats-grid">
+              <div class="db-stat-card">
+                <div class="db-stat-stripe" style="background:var(--teal)"></div>
+                <div class="db-stat-label"><svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg> Total Leads</div>
+                <div class="db-stat-value" id="stat-total">0</div>
+                <div class="db-stat-footer"><span class="db-chip db-chip-teal">Live Monitor</span></div>
+              </div>
+              <div class="db-stat-card">
+                <div class="db-stat-stripe" style="background:#10b981"></div>
+                <div class="db-stat-label"><svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg> Voice Channels</div>
+                <div class="db-stat-value" id="sv-calls">Active</div>
+                <div class="db-stat-footer"><span class="db-chip db-chip-blue">STT Connected</span></div>
+              </div>
+              <div class="db-stat-card">
+                <div class="db-stat-stripe" style="background:var(--orange)"></div>
+                <div class="db-stat-label"><svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/></svg> Web Leads</div>
+                <div class="db-stat-value" id="stat-web">0</div>
+                <div class="db-stat-footer"><span class="db-chip db-chip-green">Calculated Live</span></div>
+              </div>
+              <div class="db-stat-card">
+                <div class="db-stat-stripe" style="background:#6366f1"></div>
+                <div class="db-stat-label"><svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg> Response Engine</div>
+                <div class="db-stat-value">Groq<span>AI</span></div>
+                <div class="db-stat-footer"><span class="db-chip db-chip-teal">Llama 3.1</span></div>
+              </div>
             </div>
-            <h3 class="panel-title">Recent Leads <span aria-hidden="true">⚡</span></h3>
-            <button class="btn-refresh-sm" onclick="loadDashboard()">↻ Refresh</button>
+
+            <!-- Two-column: System Health + Recent Leads -->
+            <div class="db-grid-2">
+              <div class="db-card">
+                <div class="db-card-hd">
+                  System Health
+                  <span class="sparkle" aria-hidden="true">✦</span>
+                </div>
+                <div class="health-list">
+                  <div class="health-item">
+                    <div class="health-item-icon teal-box-sm"><svg viewBox="0 0 16 16" fill="white" width="10" height="10"><path d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4z"/></svg></div>
+                    <div class="health-item-info"><span class="health-name">Voice Recognition</span><span class="health-uptime">Groq Whisper</span></div>
+                    <span class="health-badge">● Operational</span>
+                  </div>
+                  <div class="health-item">
+                    <div class="health-item-icon teal-box-sm"><svg viewBox="0 0 16 16" fill="white" width="10" height="10"><path d="M11.3 1.046A1 1 0 0112 2v3h2a1 1 0 01.82 1.573l-5 7A1 1 0 018 13v-3H6a1 1 0 01-.82-1.573l5-7a1 1 0 011.12-.38z"/></svg></div>
+                    <div class="health-item-info"><span class="health-name">AI Processing</span><span class="health-uptime">Groq Llama 3.1</span></div>
+                    <span class="health-badge">● Operational</span>
+                  </div>
+                  <div class="health-item">
+                    <div class="health-item-icon teal-box-sm"><svg viewBox="0 0 16 16" fill="white" width="10" height="10"><path d="M9.383 1.076A1 1 0 0110 2v10a1 1 0 01-1.707.707L4.586 9H2a1 1 0 01-1-1V6a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217z"/></svg></div>
+                    <div class="health-item-info"><span class="health-name">Text-to-Speech</span><span class="health-uptime">ElevenLabs</span></div>
+                    <span class="health-badge">● Operational</span>
+                  </div>
+                  <div class="health-item">
+                    <div class="health-item-icon teal-box-sm"><svg viewBox="0 0 16 16" fill="white" width="10" height="10"><path d="M3 2a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2H3z"/></svg></div>
+                    <div class="health-item-info"><span class="health-name">Database</span><span class="health-uptime">SQL Server</span></div>
+                    <span class="health-badge">● Operational</span>
+                  </div>
+                </div>
+              </div>
+              <div class="db-card">
+                <div class="db-card-hd">
+                  Recent Leads
+                  <button class="btn-refresh-sm" onclick="loadDashboard()">↻ Refresh</button>
+                </div>
+                <div id="recent-activity-list">
+                  <div class="activity-loading">Loading…</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hourly activity chart -->
+            <div class="db-card" style="margin-top: 14px;">
+              <div class="db-card-hd">Hourly Activity <span class="db-chip db-chip-green">Today</span></div>
+              <div style="position:relative;height:200px"><canvas id="hourlyChart" role="img" aria-label="Hourly activity chart">Hourly activity chart.</canvas></div>
+            </div>
           </div>
-          <div id="recent-activity-list">
-            <div class="activity-loading">Loading…</div>
+
+          <!-- ═══ TAB: CONVERSATIONS ═══ -->
+          <div class="db-tab" id="tab-conversations">
+            <div class="db-grid-chat">
+              <div class="db-card" style="padding:14px">
+                <div class="db-card-hd">Conversation Stream</div>
+                <div class="db-conv-list" id="db-convList">
+                  <p style="font-size:12px;color:var(--text-muted);text-align:center;padding:20px">No active sessions yet.</p>
+                </div>
+              </div>
+              <div class="db-card db-chat-view">
+                <div class="db-chat-header">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div class="db-chat-av" id="db-chatAv">VD</div>
+                    <div>
+                      <div style="font-size:14px;font-weight:600;color:var(--text-primary)" id="db-chatName">Select a Lead</div>
+                      <div style="font-size:11px;color:var(--text-muted)" id="db-chatSub">VocalDesk Conversation Viewer</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="db-chat-msgs" id="db-chatBox">
+                  <div class="db-msg db-msg-b">Select a conversation from the list to view the transcript.</div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+
+          <!-- ═══ TAB: VOICE CALLS ═══ -->
+          <div class="db-tab" id="tab-voicecalls">
+            <div class="db-card">
+              <div class="db-card-hd">Voice Call Status</div>
+              <div class="db-call-row">
+                <div class="db-call-l">
+                  <div class="db-call-ic db-call-ic-live"><svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg></div>
+                  <div>
+                    <div class="db-call-num">Voice Engine Active</div>
+                    <div class="db-call-dur">Groq Whisper STT + ElevenLabs TTS endpoints ready</div>
+                  </div>
+                </div>
+                <span class="db-chip db-chip-green">Active</span>
+              </div>
+              <div class="db-call-row">
+                <div class="db-call-l">
+                  <div class="db-call-ic db-call-ic-done"><svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg></div>
+                  <div>
+                    <div class="db-call-num">AI Sales Conversations</div>
+                    <div class="db-call-dur">Browser-based voice calls with real-time AI responses</div>
+                  </div>
+                </div>
+                <span class="db-chip db-chip-teal">Ready</span>
+              </div>
+            </div>
+            <div class="db-card" style="margin-top:14px">
+              <div class="db-card-hd">Weekly Call Volume</div>
+              <div style="position:relative;height:200px"><canvas id="weeklyChart"></canvas></div>
+            </div>
+          </div>
+
+          <!-- ═══ TAB: ANALYTICS ═══ -->
+          <div class="db-tab" id="tab-analytics">
+            <div class="db-card">
+              <div class="db-card-hd">Lead Conversion Trend — Last 7 Days</div>
+              <div style="position:relative;height:220px"><canvas id="revenueChart" role="img" aria-label="7-day lead trend">Lead conversion trend.</canvas></div>
+            </div>
+            <div class="db-grid-2" style="margin-top:14px">
+              <div class="db-card">
+                <div class="db-card-hd">Response Time</div>
+                <div class="db-stat-value" id="stat-latency" style="font-size:2rem;margin:12px 0">1.2s</div>
+                <div class="db-stat-label" style="color:var(--text-muted)">Average AI response latency</div>
+              </div>
+              <div class="db-card">
+                <div class="db-card-hd">WhatsApp Leads</div>
+                <div class="db-stat-value" id="stat-whatsapp" style="font-size:2rem;margin:12px 0">0</div>
+                <div class="db-stat-label" style="color:var(--text-muted)">Leads from WhatsApp channel</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══ TAB: LEADS TABLE ═══ -->
+          <div class="db-tab" id="tab-leads">
+            <div class="db-card">
+              <div class="db-card-hd">Lead Database <span class="db-chip db-chip-teal" id="db-lead-badge">0 leads</span></div>
+              <table class="db-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Source</th>
+                    <th style="text-align:right">Interest</th>
+                    <th style="text-align:right">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="db-leadsTableBody">
+                  <tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted)">No leads yet. Start a voice conversation to capture leads!</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div><!-- /db-content -->
+      </div><!-- /db-main -->
+    </div><!-- /db-layout -->
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════
@@ -932,7 +1011,8 @@
   <!-- Toast -->
   <div id="toast" class="toast" role="alert" aria-live="polite"></div>
 
-  <script src="app.js?v=4"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script src="app.js?v=5"></script>
 </body>
 
 </html>
