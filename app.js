@@ -36,7 +36,7 @@ function initParticles() {
 
 const API_BASE = (window.location.origin.includes('localhost') || window.location.protocol === 'file:')
   ? 'http://localhost:8001'
-  : 'https://vocaldesk-backend.onrender.com';
+  : 'https://vocaldesk-backend-7pxz.onrender.com';
 
 const api = {
   token: sessionStorage.getItem('vocaldesk_token') || null,
