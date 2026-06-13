@@ -93,7 +93,17 @@ function showScreen(name) {
     _onScreenEnter(name);
   }
   
-  // Update back button visibility
+  // Update global controls visibility
+  const globalControls = document.querySelector('.global-controls');
+  if (globalControls) {
+    if (name === 'admin-dashboard') {
+      globalControls.style.display = 'none';
+    } else {
+      globalControls.style.display = 'flex';
+    }
+  }
+
+  // Update back button visibility specifically
   const btnBack = document.getElementById('btn-back');
   if (btnBack) {
     if (name === 'marketing' || name === 'landing' || name === 'admin-login') {
@@ -991,8 +1001,8 @@ function initDashCharts() {
   const tealRgba = 'rgba(0,169,165,';
   const defFont = { family: "'Inter','Segoe UI',sans-serif", size: 11, color: '#94a3b8' };
 
-  const gridOpts = { color: 'rgba(0,0,0,0.04)', drawBorder: false };
-  const tickOpts = { font: { size: 10 }, color: '#94a3b8', padding: 6 };
+  const gridOpts = { color: 'rgba(255,255,255,0.06)', drawBorder: false };
+  const tickOpts = { font: { size: 10 }, color: '#cbd5e1', padding: 6 };
 
   // Hourly Activity (Overview tab)
   const hCtx = document.getElementById('hourlyChart');
