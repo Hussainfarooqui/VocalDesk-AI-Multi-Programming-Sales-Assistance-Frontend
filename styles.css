@@ -955,6 +955,8 @@ body {
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-muted);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .form-input {
