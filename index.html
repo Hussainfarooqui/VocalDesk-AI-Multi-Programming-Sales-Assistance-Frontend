@@ -45,9 +45,88 @@
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════
-       SCREEN 1: LANDING
+       SCREEN: MARKETING LANDING PAGE
   ══════════════════════════════════════════════════════════════ -->
-  <div id="screen-landing" class="screen active">
+  <div id="screen-marketing" class="screen active">
+    <div class="marketing-wrap">
+      <h1 class="marketing-title">VocalDesk</h1>
+      <p class="marketing-subtitle">The intelligent voice assistant that handles your sales calls, meetings, and notes automatically.</p>
+      <div class="marketing-ctas">
+        <button class="btn-cta btn-primary" onclick="showScreen('signup')">Get Started</button>
+        <button class="btn-cta btn-secondary" onclick="showScreen('admin-login')">Login</button>
+      </div>
+      <div class="marketing-features">
+        <div class="feature-item">
+          <span class="feature-icon">🎙️</span>
+          <span>Voice Recognition</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🧠</span>
+          <span>AI Intelligence</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">⚡</span>
+          <span>Real-time Response</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SCREEN: SIGN UP FORM
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="screen-signup" class="screen">
+    <div class="admin-login-wrap">
+      <div class="admin-login-header">
+        <h2>Create Account</h2>
+        <p>Join VocalDesk today.</p>
+      </div>
+      <form id="form-signup" onsubmit="handleSignup(event)">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <div class="form-input-wrap">
+            <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <input type="text" id="signup-username" class="form-input" placeholder="e.g. john_doe" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <div class="form-input-wrap">
+            <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <input type="email" id="signup-email" class="form-input" placeholder="john@example.com" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="form-input-wrap">
+            <svg class="form-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <input type="password" id="signup-password" class="form-input" placeholder="••••••••" required />
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-cta btn-primary" style="width: 100%" id="btn-signup-submit">Sign Up</button>
+        </div>
+        <div id="signup-error" class="login-error" style="display: none;"></div>
+      </form>
+      <div style="margin-top: 16px; text-align: center; color: var(--text-muted); font-size: 14px;">
+        Already have an account? <a href="#" onclick="showScreen('admin-login'); return false;" style="color: var(--teal); text-decoration: none;">Log In</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SCREEN 1: VOICE DASHBOARD (Previously Landing)
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="screen-landing" class="screen">
     <div class="landing-wrap">
       <!-- Central mic hero -->
       <div class="hero-mic-container" id="btn-hero-mic" role="button" tabindex="0" onclick="showScreen('voice-input')"

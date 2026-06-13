@@ -76,8 +76,8 @@ const api = {
 // SCREEN ROUTER
 // ════════════════════════════════════════════════════════════════
 
-let _prevScreen = 'landing';
-let currentScreen = 'landing';
+let _prevScreen = 'marketing';
+let currentScreen = 'marketing';
 
 function showScreen(name) {
   const cur = document.querySelector('.screen.active');
@@ -96,7 +96,7 @@ function showScreen(name) {
   // Update back button visibility
   const btnBack = document.getElementById('btn-back');
   if (btnBack) {
-    if (name === 'landing' || name === 'admin-login') {
+    if (name === 'marketing' || name === 'landing' || name === 'admin-login') {
       btnBack.style.display = 'none';
     } else {
       btnBack.style.display = 'flex';
@@ -108,7 +108,8 @@ function goBack() {
   if (currentScreen === 'admin-dashboard') showScreen('admin-login');
   else if (currentScreen === 'voice-input') showScreen('landing');
   else if (currentScreen === 'summary') showScreen('landing');
-  else showScreen('landing');
+  else if (currentScreen === 'signup' || currentScreen === 'admin-login') showScreen('marketing');
+  else showScreen('marketing');
 }
 
 function toggleTheme() {
@@ -707,13 +708,44 @@ async function adminLogin(e) {
     api.token = data.access_token;
     sessionStorage.setItem('vocaldesk_token', data.access_token);
     showToast(`Welcome, ${data.username}!`, 'success');
-    showScreen('admin-dashboard');
+    
+    if (data.role === 'admin' || data.role === 'staff') {
+      showScreen('admin-dashboard');
+    } else {
+      showScreen('landing');
+    }
   } catch (err) {
     errEl.textContent = 'Incorrect username or password. Please try again.';
     errEl.style.display = 'block';
   } finally {
     btnText.style.display = 'block';
     spinner.style.display = 'none';
+  }
+}
+
+async function handleSignup(e) {
+  e.preventDefault();
+  const username = document.getElementById('signup-username').value.trim();
+  const email    = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value;
+  const errEl    = document.getElementById('signup-error');
+  const btn      = document.getElementById('btn-signup-submit');
+
+  errEl.style.display = 'none';
+  btn.textContent = 'Signing Up...';
+  btn.disabled = true;
+
+  try {
+    const body = { username, email, password };
+    await api.post('/api/admin/signup', body);
+    showToast('Account created! Please log in.', 'success');
+    showScreen('admin-login');
+  } catch (err) {
+    errEl.textContent = 'Signup failed: ' + err.message;
+    errEl.style.display = 'block';
+  } finally {
+    btn.textContent = 'Sign Up';
+    btn.disabled = false;
   }
 }
 
