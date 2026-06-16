@@ -793,14 +793,8 @@ async function handleSignup(e) {
     const body = { username, email, password };
     await api.post('/api/admin/signup', body);
     
-    // Automatically log the user in after successful signup
-    const loginBody = new URLSearchParams({ username, password });
-    const loginData = await api.post('/api/admin/login', loginBody, true);
-    api.token = loginData.access_token;
-    sessionStorage.setItem('vocaldesk_token', loginData.access_token);
-    
-    showToast('Account created successfully!', 'success');
-    showScreen('landing');
+    showToast('Account created successfully! Please log in.', 'success');
+    showScreen('user-login');
   } catch (err) {
     errEl.textContent = 'Signup failed: ' + err.message;
     errEl.style.display = 'block';
