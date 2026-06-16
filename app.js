@@ -118,7 +118,7 @@ function goBack() {
   if (currentScreen === 'admin-dashboard') showScreen('admin-login');
   else if (currentScreen === 'voice-input') showScreen('landing');
   else if (currentScreen === 'summary') showScreen('landing');
-  else if (currentScreen === 'signup' || currentScreen === 'admin-login') showScreen('marketing');
+  else if (currentScreen === 'signup' || currentScreen === 'admin-login' || currentScreen === 'user-login') showScreen('marketing');
   else showScreen('marketing');
 }
 
@@ -700,6 +700,39 @@ function retryFromError(type) {
 // ADMIN AUTH
 // ════════════════════════════════════════════════════════════════
 
+async function userLogin(e) {
+  e.preventDefault();
+  const username = document.getElementById('user-username').value.trim();
+  const password = document.getElementById('user-password').value;
+  const errEl    = document.getElementById('user-login-error');
+  const btnText  = document.getElementById('user-login-btn-text');
+  const spinner  = document.getElementById('user-login-spinner');
+
+  errEl.style.display = 'none';
+  btnText.style.display = 'none';
+  spinner.style.display = 'block';
+
+  try {
+    const body = new URLSearchParams({ username, password });
+    const data = await api.post('/api/admin/login', body, true);
+    api.token = data.access_token;
+    sessionStorage.setItem('vocaldesk_token', data.access_token);
+    showToast(`Welcome, ${data.username}!`, 'success');
+    
+    if (data.role === 'admin' || data.role === 'staff') {
+      showScreen('admin-dashboard');
+    } else {
+      showScreen('landing');
+    }
+  } catch (err) {
+    errEl.textContent = 'Incorrect username or password. Please try again.';
+    errEl.style.display = 'block';
+  } finally {
+    btnText.style.display = 'block';
+    spinner.style.display = 'none';
+  }
+}
+
 async function adminLogin(e) {
   e.preventDefault();
   const username = document.getElementById('admin-username').value.trim();
@@ -749,7 +782,7 @@ async function handleSignup(e) {
     const body = { username, email, password };
     await api.post('/api/admin/signup', body);
     showToast('Account created! Please log in.', 'success');
-    showScreen('admin-login');
+    showScreen('user-login');
   } catch (err) {
     errEl.textContent = 'Signup failed: ' + err.message;
     errEl.style.display = 'block';

@@ -118,7 +118,7 @@
         <div id="signup-error" class="login-error" style="display: none;"></div>
       </form>
       <div style="margin-top: 16px; text-align: center; color: var(--text-muted); font-size: 14px;">
-        Already have an account? <a href="#" onclick="showScreen('admin-login'); return false;" style="color: var(--teal); text-decoration: none;">Log In</a>
+        Already have an account? <a href="#" onclick="showScreen('user-login'); return false;" style="color: var(--teal); text-decoration: none;">Log In</a>
       </div>
     </div>
   </div>
@@ -517,6 +517,63 @@
         <span class="status-label">AI is ready when you are</span>
         <span class="status-dot dot-teal"></span>
       </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SCREEN 6.5: USER LOGIN
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="screen-user-login" class="screen">
+    <div class="admin-login-wrap">
+      <div class="admin-shield-icon">
+        <svg viewBox="0 0 24 24" fill="none" width="28" height="28" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </div>
+      <h1 class="admin-title">User Login</h1>
+      <p class="admin-subtitle">Login to VocalDesk</p>
+
+      <div class="admin-form-card">
+        <div id="user-login-error" class="login-error" style="display:none"></div>
+
+        <form id="user-login-form" onsubmit="userLogin(event)">
+          <div class="form-field">
+            <label class="form-label" for="user-username">Email Address or Username</label>
+            <div class="form-input-wrap">
+              <svg class="form-input-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+              </svg>
+              <input type="text" id="user-username" class="form-input" placeholder="user@example.com"
+                autocomplete="username" required />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="user-password">Password</label>
+            <div class="form-input-wrap">
+              <svg class="form-input-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                <path fill-rule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clip-rule="evenodd" />
+              </svg>
+              <input type="password" id="user-password" class="form-input" placeholder="••••••••"
+                autocomplete="current-password" required />
+            </div>
+          </div>
+
+          <button type="submit" id="btn-user-login" class="btn-cta full-width">
+            <span id="user-login-btn-text">Log In</span>
+            <div id="user-login-spinner" class="inline-spinner" style="display:none"></div>
+          </button>
+        </form>
+        <div class="form-footer">
+          <span>Don't have an account?</span>
+          <a href="#" onclick="showScreen('signup'); return false;">Sign Up</a>
+        </div>
+      </div>
+      <button class="btn-link" onclick="showScreen('landing')" style="margin-top:12px">← Back to Voice Assistant</button>
     </div>
   </div>
 
