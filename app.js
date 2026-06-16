@@ -146,7 +146,7 @@ let callTimerInterval = null;
 let callStartTime = null;
 let isCallMode = false;
 
-function startCallMode() {
+async function startCallMode() {
   isCallMode = true;
   showScreen('call-mode');
   
@@ -154,8 +154,19 @@ function startCallMode() {
   updateCallTimer();
   callTimerInterval = setInterval(updateCallTimer, 1000);
   
-  // Automatically start recording for call
-  startRecording();
+  document.getElementById('call-ai-status').textContent = 'Connecting...';
+  
+  // Trigger initial AI greeting instead of immediately recording
+  try {
+    const data = await api.post('/api/text-input', {
+      message: "Hello",
+      conversation_history: conversationHistory,
+    });
+    handleAIResponse(data);
+  } catch (err) {
+    console.error('Initial greeting error:', err);
+    startRecording();
+  }
 }
 
 function updateCallTimer() {
