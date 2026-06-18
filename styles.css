@@ -960,7 +960,7 @@ body {
 /* ═══════════════════════════════════════════════════════════════
    ADMIN LOGIN SCREEN
 ════════════════════════════════════════════════════════════════ */
-#screen-admin-login { align-items: center; justify-content: center; }
+#screen-admin-login, #screen-user-login, #screen-register, #screen-signup, #screen-reset { align-items: center; justify-content: center; }
 
 .admin-login-wrap {
   display: flex;
