@@ -430,19 +430,88 @@ async function sendChatTextMessage() {
   inp.value = '';
   lastTranscript = msg;
 
-  showScreen('processing');
-  runProcessingAnimation(true);
+  document.getElementById('inline-recording-indicator').style.display = 'flex';
+  document.getElementById('inline-recording-timer').textContent = 'Sending message...';
 
   try {
     const data = await api.post('/api/text-input', {
       message: msg,
       conversation_history: conversationHistory,
     });
+    document.getElementById('inline-recording-indicator').style.display = 'none';
     handleAIResponse(data);
   } catch (err) {
     console.error('Chat text input error:', err);
+    document.getElementById('inline-recording-indicator').style.display = 'none';
     if (!navigator.onLine) showScreen('error-internet');
-    else { showToast('Error: ' + err.message, 'error'); showScreen('response'); }
+    else showToast('Error: ' + err.message, 'error');
+  }
+}
+
+async function toggleRecordingInline() {
+  if (isRecording) {
+    stopRecordingInline();
+  } else {
+    await startRecordingInline();
+  }
+}
+
+async function startRecordingInline() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(stream, { mimeType: getSupportedMimeType() });
+    mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunks.push(e.data); };
+    mediaRecorder.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      await processAudioChunksInline();
+    };
+    mediaRecorder.start(100);
+    isRecording = true;
+    
+    document.getElementById('inline-recording-indicator').style.display = 'flex';
+    document.getElementById('inline-recording-timer').textContent = 'Recording... Tap mic to stop';
+    document.getElementById('btn-inline-mic').style.background = 'linear-gradient(145deg, #ef4444, #b91c1c)';
+  } catch (err) {
+    console.error('Mic error:', err);
+    showToast('Microphone error: ' + err.message, 'error');
+  }
+}
+
+function stopRecordingInline() {
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    mediaRecorder.stop();
+    isRecording = false;
+    document.getElementById('inline-recording-timer').textContent = 'Processing audio...';
+    document.getElementById('btn-inline-mic').style.background = 'linear-gradient(135deg, var(--teal), var(--teal-dark))';
+  }
+}
+
+async function processAudioChunksInline() {
+  if (audioChunks.length === 0) { 
+    document.getElementById('inline-recording-indicator').style.display = 'none';
+    return; 
+  }
+  const blob = new Blob(audioChunks, { type: getSupportedMimeType() || 'audio/webm' });
+  if (blob.size < 1000) {
+    document.getElementById('inline-recording-indicator').style.display = 'none';
+    return;
+  }
+
+  const fd = new FormData();
+  fd.append('audio', blob, 'recording.webm');
+  if (conversationHistory.length) {
+    fd.append('conversation_history', JSON.stringify(conversationHistory));
+  }
+
+  try {
+    const data = await api.post('/api/voice-input', fd, true);
+    document.getElementById('inline-recording-indicator').style.display = 'none';
+    handleAIResponse(data);
+  } catch (err) {
+    console.error('Voice input error:', err);
+    document.getElementById('inline-recording-indicator').style.display = 'none';
+    showToast('AI processing error. Please try again.', 'error');
   }
 }
 
@@ -733,7 +802,7 @@ async function userLogin(e) {
     if (data.role === 'admin' || data.role === 'staff') {
       showScreen('admin-dashboard');
     } else {
-      showScreen('landing');
+      showScreen('response');
     }
   } catch (err) {
     errEl.textContent = 'Incorrect username or password. Please try again.';
@@ -766,7 +835,7 @@ async function adminLogin(e) {
     if (data.role === 'admin' || data.role === 'staff') {
       showScreen('admin-dashboard');
     } else {
-      showScreen('landing');
+      showScreen('response');
     }
   } catch (err) {
     errEl.textContent = 'Incorrect username or password. Please try again.';
