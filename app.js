@@ -805,7 +805,11 @@ async function userLogin(e) {
       showScreen('response');
     }
   } catch (err) {
-    errEl.textContent = 'Incorrect username or password. Please try again.';
+    if (err.message && err.message.includes('HTTP')) {
+      errEl.textContent = 'Server Error: ' + err.message + ' (Backend might be asleep/deploying)';
+    } else {
+      errEl.textContent = 'Incorrect username or password. Please try again.';
+    }
     errEl.style.display = 'block';
   } finally {
     btnText.style.display = 'block';
@@ -838,7 +842,11 @@ async function adminLogin(e) {
       showScreen('response');
     }
   } catch (err) {
-    errEl.textContent = 'Incorrect username or password. Please try again.';
+    if (err.message && err.message.includes('HTTP')) {
+      errEl.textContent = 'Server Error: ' + err.message + ' (Backend might be asleep/deploying)';
+    } else {
+      errEl.textContent = 'Incorrect username or password. Please try again.';
+    }
     errEl.style.display = 'block';
   } finally {
     btnText.style.display = 'block';
